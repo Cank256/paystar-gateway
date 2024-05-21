@@ -6,6 +6,8 @@ const http = require('http')
 const mongo = require('mongoose')
 const routes = require('./src/routes')
 
+const { ErrorMessages } = require('./src/utils/constants')
+
 const app = express()
 const port = Bun.env.APP_PORT || 8030
 const dbUri = Bun.env.MONGODB_URI || 'mongodb://localhost:27017/paystar-gateway'
@@ -18,6 +20,13 @@ app.use(helmet())
 
 // Add Routes
 app.use(routes)
+
+app.use((req: any, res: any) => {
+    res.status(404).json({
+        success: false,
+        error: ErrorMessages.NOT_FOUND
+    })
+})
 
 // Create server
 const server = http.createServer(app)
