@@ -31,6 +31,23 @@ app.use((req: any, res: any) => {
 // Create server
 const server = http.createServer(app)
 
+// ANSI escape codes for colors
+const green = '\x1b[32m';
+const yellow = '\x1b[33m';
+const reset = '\x1b[0m';
+
+console.log(
+    `${green}
+    ██████╗  █████╗ ██╗   ██╗███████╗████████╗ █████╗ ██████╗
+    ██╔══██╗██╔══██╗██║   ██║██╔════╝╚══██╔══╝██╔══██╗██╔══██╗
+    ██████╔╝███████║██║██ ██║███████╗   ██║   ███████║██████╔╝
+    ██╔═══╝ ██╔══██║   ██║   ╚════██║   ██║   ██╔══██║██╔══██║
+    ██║     ██║  ██║   ██║   ███████║   ██║   ██║  ██║██║    ██║  
+    ╚═╝     ╚═╝  ╚═╝   ╚═╝   ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝    ╚═╝
+    ${reset}
+    ${yellow}Your payment solution${reset}`
+);
+
 mongo.connect(dbUri)
     .then(() => {
         console.log('Connected to database')
