@@ -20,8 +20,24 @@ cd paystar-gateway
 bun install
 ```
 
-- Run the application:
+- Rename the .env.example file to .env for the environment variables
+```bash
+cp .env.example .env
+```
+
+- Fill in the correct values for the avariables in the .env file
+```bash
+APP_PORT=8030
+
+FLUTTEWAV_API_URL="https://api.flutterwave.com/v3/payments"
+FLUTTERWAVE_PUBLIC_KEY=your_flutterwave_public_key
+FLUTTERWAVE_SECRET_KEY=your_flutterwave_secret_key
+
+MONGODB_URI=your_mongodb_connection_uri
+```
+
+- Run the application (in Dev / Watch mode):
 
 ```bash
-bun run src/main.ts
+bun dev
 ```
