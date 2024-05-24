@@ -5,8 +5,8 @@ paymentRoutes.get('/', paymentsController.getAll)
 
 paymentRoutes.post('/', paymentsController.initiate)
 
-paymentRoutes.get('/:paymentId', paymentsController.getOne)
+paymentRoutes.get('/:paymentRef', paymentsController.getOne) 
 
-paymentRoutes.post('/:paymentId/refund', paymentsController.refund)
+paymentRoutes.post('/:paymentRef/refund', paymentsController.refund)
 
 module.exports = paymentRoutes

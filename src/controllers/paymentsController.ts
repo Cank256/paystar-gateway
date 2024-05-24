@@ -9,7 +9,10 @@ class PaymentsController {
 
     async initiate(req: any, res: any) {
         const details = ['paymentRef', 'method', 'amount', 'currency', 'description']
-        validate.request(req, res, details, 'body')
+
+        // Validate request
+        await validate.request(req, res, details, 'body')
+
         res.status(200).json({
             'message': 'Initiate payment transaction'
         })
@@ -17,15 +20,23 @@ class PaymentsController {
 
     async getOne(req: any, res: any) {
         const details = ['paymentRef']
-        validate.request(req, res, details, 'params')
+
+        // Validate request
+        await validate.request(req, res, details, 'params')
+
         res.status(200).json({
-            'message': 'Get payment with id ' + req.params.paymentId
+            'message': 'Get payment with id ' + req.params.paymentRef
         })
     }
 
     async refund(req: any, res: any) {
+        const details = ['paymentRef']
+
+        // Validate request
+        await validate.request(req, res, details, 'params')
+
         res.status(200).json({
-            'message': 'Refund payment'
+            'message': `Refund payment with id ${req.params.paymentRef}`
         })
     }
 }
