@@ -1,31 +1,12 @@
 const paymentRoutes = require('express').Router()
+const paymentsController = require('../controllers/paymentsController')
 
-paymentRoutes.get('/', (req: any, res: any) => {
-    res.status(200).json({
-        success: true,
-        message: 'Get All Payment Transactions'
-    })
-})
+paymentRoutes.get('/', paymentsController.getAll)
 
-paymentRoutes.post('/', (req: any, res: any) => {
-    res.status(200).json({
-        success: true,
-        message: 'Initiate a Payment Transaction'
-    })
-})
+paymentRoutes.post('/', paymentsController.initiate)
 
-paymentRoutes.get('/:paymentId', (req: any, res: any) => {
-    res.status(200).json({
-        success: true,
-        message: `Get a Payment Transaction using paymentId ${req.params.paymentId}`
-    })
-})
+paymentRoutes.get('/:paymentId', paymentsController.getOne)
 
-paymentRoutes.post('/:paymentId/refund', (req: any, res: any) => {
-    res.status(200).json({
-        success: true,
-        message: 'initiate Payment Refund'
-    })
-})
+paymentRoutes.post('/:paymentId/refund', paymentsController.refund)
 
 module.exports = paymentRoutes

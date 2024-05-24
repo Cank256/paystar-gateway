@@ -1,5 +1,4 @@
 const routes = require('express').Router()
-const paymentRoutes = require('./paymentRoutes')
 
 routes.get('/', (req: any, res: any) => {
     res.status(200).json({
@@ -8,6 +7,6 @@ routes.get('/', (req: any, res: any) => {
     })
 })
 
-routes.use('/payments', paymentRoutes)
+routes.use('/payments', require('./paymentRoutes'))
 
 module.exports = routes
