@@ -1,4 +1,5 @@
 const validate = require('./../middleware/validationMiddleware')
+const payments = require('./../services/paymentsService')
 
 class PaymentsController {
     async getAll(req: any, res: any) {
@@ -13,9 +14,11 @@ class PaymentsController {
         // Validate request
         await validate.request(req, res, details, 'body')
 
-        res.status(200).json({
-            'message': 'Initiate payment transaction'
-        })
+        const result = req.body.method == 'momo' ? 
+            payments.initiateMobileMoneyPayment(req.body) :
+            payments.initiateCardPayment(req.body)
+
+        res.status(200).json(result)
     }
 
     async getOne(req: any, res: any) {
