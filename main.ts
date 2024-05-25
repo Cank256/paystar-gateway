@@ -5,6 +5,7 @@ const helmet = require('helmet')
 const http = require('http')
 const mongo = require('mongoose')
 const routes = require('./src/routes')
+const uniqid = require('uniqid')
 
 const { ErrorMessages } = require('./src/utils/constants')
 
@@ -18,9 +19,16 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(helmet())
 
+// Generate a gateway ref for every request
+app.use((req: any, res: any, next: any) => {
+    req.gatewayRef = uniqid()
+    next()
+})
+
 // Add Routes
 app.use(routes)
 
+// Handle 404 Error
 app.use((req: any, res: any) => {
     res.status(404).json({
         success: false,

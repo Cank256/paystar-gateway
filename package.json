@@ -17,6 +17,7 @@
     "express": "^4.19.2",
     "helmet": "^7.1.0",
     "http": "^0.0.1-security",
-    "mongoose": "^8.4.0"
+    "mongoose": "^8.4.0",
+    "uniqid": "^5.4.0"
   }
 }
