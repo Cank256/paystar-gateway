@@ -15,8 +15,8 @@ class PaymentsController {
         await validate.request(req, res, details, 'body')
 
         const result = req.body.method == 'momo' ? 
-            payments.initiateMobileMoneyPayment(req.body) :
-            payments.initiateCardPayment(req.body)
+            await payments.initiateMobileMoneyPayment(req.body) :
+            await payments.initiateCardPayment(req.body)
 
         res.status(200).json(result)
     }
