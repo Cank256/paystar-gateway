@@ -9,14 +9,18 @@ class PaymentsController {
     }
 
     async initiate(req: any, res: any) {
-        const details = ['paymentRef', 'method', 'amount', 'currency', 'description']
+        const details = ['paymentRef', 'method', 'amount', 'currency', 'email', 'phone_number', 'description']
 
         // Validate request
         await validate.request(req, res, details, 'body')
 
+        const payDetails = req.body
+        payDetails.gatewayRef = req.gatewayRef
+        payDetails.client_ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
         const result = req.body.method == 'momo' ? 
-            await payments.initiateMobileMoneyPayment(req.body) :
-            await payments.initiateCardPayment(req.body)
+            await payments.initiateMobileMoneyPayment(payDetails) :
+            await payments.initiateCardPayment(payDetails)
 
         res.status(200).json(result)
     }

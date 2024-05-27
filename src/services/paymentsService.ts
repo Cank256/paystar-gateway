@@ -1,18 +1,31 @@
+const { ErrorMessages } = require('../utils/constants')
+const Flutterwave = require('flutterwave-node-v3');
+const flw = new Flutterwave(Bun.env.FLUTTERWAVE_PUBLIC_KEY, Bun.env.FLUTTERWAVE_SECRET_KEY);
 
 class PaymentsService {
-    serviceUrl: any
-    secretKey: any
 
-    constructor() {
-        this.serviceUrl = Bun.env.FLUTTERWAVE_API_URL
-        this.secretKey = Bun.env.FLUTTERWAVE_SECRET_KEY
-    }
+    async initiateMobileMoneyPayment(payDetails: any) {
 
-    async initiateMobileMoneyPayment(req: any) {
+        try {
+            const reqDetails = {
+                'tx_ref':payDetails.gatewayRef,
+                'amount':payDetails.amount,
+                'currency':payDetails.currency,
+                'network':'MTN',
+                'email':payDetails.email,
+                'phone_number':payDetails.phone_number,
+                'client_ip':payDetails.client_ip,
+            }
 
-
-        return {
-            message: 'Momo Payment Initiated'
+            const response =  await flw.MobileMoney.uganda(reqDetails)
+            return response
+        }
+        catch(err){
+            return {
+                'success': false,
+                'message': ErrorMessages.INTERNAL_SERVER_ERROR,
+                'error': err
+            }
         }
     }
 

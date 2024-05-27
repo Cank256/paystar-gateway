@@ -15,9 +15,11 @@
     "body-parse": "^0.1.0",
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "flutterwave-node-v3": "^1.1.10",
     "helmet": "^7.1.0",
     "http": "^0.0.1-security",
     "mongoose": "^8.4.0",
+    "node-phone-utils": "^2.1.1",
     "uniqid": "^5.4.0"
   }
 }

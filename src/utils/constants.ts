@@ -7,6 +7,7 @@ export const ErrorMessages = {
     BAD_REQUEST: 'Bad request',
     UNPROCESSABLE_ENTITY: 'Unprocessable entity',
     WRONG_PAYMENT_METHOD: 'Wrong payment method. Use card or momo',
+    INVALID_PHONE_NUMBER: 'Invalid phone number or unsupported phone network',
 }
 
 export const PaymentMethods = {
