@@ -2,7 +2,7 @@ const { ErrorMessages } = require('../utils/constants')
 const Flutterwave = require('flutterwave-node-v3');
 const flw = new Flutterwave(Bun.env.FLUTTERWAVE_PUBLIC_KEY, Bun.env.FLUTTERWAVE_SECRET_KEY);
 const Utils = require('../utils/utils')
-const { StatusCodes } = require('../utils/constants')
+const { StatusCodes, RequestStatus } = require('../utils/constants')
 
 class PaymentsService {
 
@@ -21,9 +21,9 @@ class PaymentsService {
 
             const response =  await flw.MobileMoney.uganda(reqDetails)
 
-            if (response.status.toUpperCase() == 'SUCCESS') {
+            if (response.status.toUpperCase() == RequestStatus.SUCCESSFULL) {
                 let data = {
-                    status: 'PENDING',
+                    status: RequestStatus.PENDING,
                     url: response.meta.authorization.redirect,
                     gateway_ref: payDetails.gatewayRef,
                     py_ref: payDetails.paymentRef,

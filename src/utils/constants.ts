@@ -26,3 +26,12 @@ export const PaymentMethods = {
     CARD: 'card',
     MOMO: 'momo',
 }
+
+export const RequestStatus = {
+    CANCELLED: 'CANCELLED',
+    COMPLETED: 'COMPLETED',
+    FAILED: 'FAILED',
+    PENDING: 'PENDING',
+    LOGGED: 'LOGGED',
+    SUCCESSFUL: 'SUCCESS',
+}
