@@ -22,7 +22,7 @@ class PaymentsController {
             await payments.initiateMobileMoneyPayment(payDetails) :
             await payments.initiateCardPayment(payDetails)
 
-        res.status(200).json(result)
+        res.status(result.code).json(result)
     }
 
     async getOne(req: any, res: any) {
