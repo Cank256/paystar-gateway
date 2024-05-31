@@ -9,7 +9,7 @@ class PaymentsService {
     async initiateMobileMoneyPayment(payDetails: any) {
 
         try {
-            const reqDetails = {
+            const payload = {
                 'tx_ref':payDetails.gatewayRef,
                 'amount':payDetails.amount,
                 'currency':payDetails.currency,
@@ -19,9 +19,9 @@ class PaymentsService {
                 'client_ip':payDetails.client_ip,
             }
 
-            const response =  await flw.MobileMoney.uganda(reqDetails)
+            const response =  await flw.MobileMoney.uganda(payload)
 
-            if (response.status.toUpperCase() == RequestStatus.SUCCESSFULL) {
+            if (response.status.toUpperCase() == RequestStatus.SUCCESSFUL) {
                 let data = {
                     status: RequestStatus.PENDING,
                     url: response.meta.authorization.redirect,
@@ -48,9 +48,72 @@ class PaymentsService {
         }
     }
 
-    async initiateCardPayment(req: any) {
-        return {
-            message: 'Card Payment Initiated'
+    async initiateCardPayment(payDetails: any) {
+        try {
+            const payload = {
+                'card_number': '5531886652142950',
+                'cvv': '564',
+                'expiry_month': '09',
+                'expiry_year': '27',
+                'currency': payDetails.currency,
+                'amount': payDetails.amount,
+                'redirect_url': payDetails.meta.redirect,
+                'fullname': payDetails.meta.client_name,
+                'email': payDetails.email,
+                'phone_number': payDetails.phone_number,
+                'enckey': process.env.FLUTTERWAVE_ENCRYPTION_KEY,
+                'tx_ref': payDetails.gatewayRef,
+                'authorization': {}
+            }
+
+            const response = await flw.Charge.card(payload)
+    
+            // For PIN transactions
+            if (response.meta.authorization.mode === 'pin') {
+                let payload2 = payload
+                payload2.authorization = {
+                    'mode': 'pin',
+                    'fields': [
+                        'pin'
+                    ],
+                    'pin': 3310
+                }
+                const reCallCharge = await flw.Charge.card(payload2)
+    
+                // Add the OTP to authorize the transaction
+                const callValidate = await flw.Charge.validate({
+                    'otp': '12345',
+                    'flw_ref': reCallCharge.data.flw_ref
+                })
+                console.log(callValidate)
+    
+            }
+    
+            if (response.status.toUpperCase() == RequestStatus.SUCCESSFUL) {
+                let data = {
+                    status: RequestStatus.PENDING,
+                    url: response.meta.authorization.redirect,
+                    gateway_ref: payDetails.gatewayRef,
+                    py_ref: payDetails.paymentRef,
+                }
+                return Utils.createResponse(StatusCodes.OK, data)
+            } else {
+                /*add the transaction IDs to the response*/
+                response.gateway_ref = payDetails.gatewayRef
+                response.py_ref = payDetails.paymentRef
+                return Utils.createResponse(StatusCodes.BAD_REQUEST, response)
+            }
+    
+    
+        } catch (err) {
+            return Utils.createResponse(
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                {
+                    gateway_ref: payDetails.gatewayRef,
+                    py_ref: payDetails.paymentRef,
+                },
+                err,
+            )
         }
     }
 }
