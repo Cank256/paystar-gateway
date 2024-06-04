@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 // Define the schema
 const transactionSchema = new mongoose.Schema({
-    paymentId: {
+    gatewayRef: {
         type: String,
         required: true
     },
-    transactionRef: {
+    paymentRef: {
         type: String,
         required: true
     },
@@ -15,21 +15,17 @@ const transactionSchema = new mongoose.Schema({
         required: true,
         default: 'pending'
     },
-    currency: {
+    message: {
         type: String,
-        required: true
+        required: true,
     },
-    amount: {
-        type: Number,
-        required: true
-    },
-    description: {
+    requestUrl: {
         type: String,
-        required: true
+        required: true,
     },
-    paymentMethod: {
+    requestIP: {
         type: String,
-        required: true
+        required: true,
     },
     requestBody: {
         type: Object,

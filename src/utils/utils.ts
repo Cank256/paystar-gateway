@@ -1,4 +1,5 @@
 const { StatusCodes } = require('./constants')
+const { Transaction } = require('../models/transactionsModel');
 
 interface IResponse {
     code: number
@@ -34,6 +35,29 @@ class Utils {
                 return `Request Failed. ${extraInfo}`.trim()
             default:
                 return `Unknown status code: ${code}. ${extraInfo}`.trim()
+        }
+    }
+
+    async insertTransactionLog(
+        reqDetails: any,
+        message?: string,
+        response?: IResponse,
+    ) {
+
+        try {
+
+            return await Transaction.save({
+                gatewayRef: reqDetails.gatewayRef,
+                paymentRef: reqDetails.body.paymentRef,
+                requestIP: reqDetails.client_ip,
+                requestUrl: reqDetails.url,
+                requestBody: reqDetails,
+                message,
+                responseBody: response,
+                createtime: new Date(),
+            })
+        } catch (err: any) {
+            console.log(err.message)
         }
     }
 }
