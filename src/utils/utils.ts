@@ -1,7 +1,14 @@
 const { StatusCodes } = require('./constants')
 
+interface IResponse {
+    code: number
+    success: boolean
+    message: string
+    data?: any
+}
+
 class Utils {
-    createResponse(code: any, data: any, extraInfo: string = ''){
+    createResponse(code: any, data: any, extraInfo: string = ''):IResponse{
         return {
             code,
             success: code < 300,
