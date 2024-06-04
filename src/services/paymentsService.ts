@@ -16,7 +16,6 @@ class PaymentsService {
                 'network':'MTN',
                 'email':payDetails.email,
                 'phone_number':payDetails.phone_number,
-                'client_ip':payDetails.client_ip,
             }
 
             const response =  await flw.MobileMoney.uganda(payload)
@@ -28,12 +27,16 @@ class PaymentsService {
                     gateway_ref: payDetails.gatewayRef,
                     py_ref: payDetails.paymentRef,
                 }
+
+                Utils.insertTransactionLog(payDetails, RequestStatus.SUCCESS, response)
                 return Utils.createResponse(StatusCodes.OK, data)
             } else {
                 /*add the transaction IDs to the response*/
                 response.gateway_ref = payDetails.gatewayRef
                 response.py_ref = payDetails.paymentRef
-                return Utils.createResponse(StatusCodes.BAD_REQUEST, response)
+
+                Utils.insertTransactionLog(payDetails, RequestStatus.FAILED, response)
+                return Utils.createResponse(StatusCodes.INTERNAL_SERVER_ERROR, response)
             }
         }
         catch(err){
@@ -96,12 +99,16 @@ class PaymentsService {
                     gateway_ref: payDetails.gatewayRef,
                     py_ref: payDetails.paymentRef,
                 }
+
+                Utils.insertTransactionLog(payDetails, RequestStatus.SUCCESS, response)
                 return Utils.createResponse(StatusCodes.OK, data)
             } else {
                 /*add the transaction IDs to the response*/
                 response.gateway_ref = payDetails.gatewayRef
                 response.py_ref = payDetails.paymentRef
-                return Utils.createResponse(StatusCodes.BAD_REQUEST, response)
+
+                Utils.insertTransactionLog(payDetails, RequestStatus.FAILED, response)
+                return Utils.createResponse(StatusCodes.INTERNAL_SERVER_ERROR, response)
             }
     
     
