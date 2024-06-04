@@ -56,18 +56,14 @@ console.log(
     ${yellow}Your payment solution${reset}`
 );
 
-// mongo.connect(dbUri)
-//     .then(() => {
-//         console.log('Connected to database')
-//         server.listen(port, () => {
-//             console.log(`Server started at http://localhost:${port}`)
-//         })
-//     })
-//     .catch((err: any) => {
-//         console.log('Failed to connect to database', err)
-//     })
+mongo.connect(dbUri)
+    .then(() => {
+        console.log('Connected to database')
+        server.listen(port, () => {
+            console.log(`Server started at http://localhost:${port}`)
+        })
+    })
+    .catch((err: any) => {
+        console.log('Failed to connect to database', err)
+    })
 
-
-server.listen(port, () => {
-    console.log(`Server started at http://localhost:${port}`)
-})
