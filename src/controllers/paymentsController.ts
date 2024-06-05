@@ -1,13 +1,28 @@
 const validate = require('./../middleware/validationMiddleware')
 const payments = require('./../services/paymentsService')
 
+/**
+ * PaymentsController handles HTTP requests related to payments.
+ */
 class PaymentsController {
+    /**
+     * Get all payments.
+     * @name Get All Payments
+     * @route {GET} /payments
+     * @handler PaymentsController.getAll
+     */
     async getAll(req: any, res: any) {
         res.status(200).json({
             'message': 'View all payments'
         })
     }
 
+    /**
+     * Initiate a new payment.
+     * @name Initiate Payment
+     * @route {POST} /payments
+     * @handler PaymentsController.initiate
+     */
     async initiate(req: any, res: any) {
         const details = ['paymentRef', 'method', 'amount', 'currency', 'email', 'phone_number', 'description']
 
@@ -26,6 +41,13 @@ class PaymentsController {
         res.status(result.code).json(result)
     }
 
+    /**
+     * Get a specific payment by its reference.
+     * @name Get Payment by Reference
+     * @route {GET} /payments/:paymentRef
+     * @param {string} paymentRef The reference ID of the payment.
+     * @handler PaymentsController.getOne
+     */
     async getOne(req: any, res: any) {
         const details = ['paymentRef']
 
@@ -37,6 +59,13 @@ class PaymentsController {
         })
     }
 
+    /**
+     * Refund a payment.
+     * @name Refund Payment
+     * @route {POST} /payments/:paymentRef/refund
+     * @param {string} paymentRef The reference ID of the payment to be refunded.
+     * @handler PaymentsController.refund
+     */
     async refund(req: any, res: any) {
         const details = ['paymentRef']
 
