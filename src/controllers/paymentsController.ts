@@ -16,7 +16,7 @@ class PaymentsController {
 
         const payDetails = req.body
         payDetails.gatewayRef = req.gatewayRef
-        payDetails.client_ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        payDetails.client_ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
         payDetails.url = req.originalUrl
 
         const result = req.body.method == 'momo' ? 

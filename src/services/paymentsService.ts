@@ -1,4 +1,3 @@
-const { ErrorMessages } = require('../utils/constants')
 const Flutterwave = require('flutterwave-node-v3');
 const flw = new Flutterwave(Bun.env.FLUTTERWAVE_PUBLIC_KEY, Bun.env.FLUTTERWAVE_SECRET_KEY);
 const Utils = require('../utils/utils')
@@ -28,14 +27,14 @@ class PaymentsService {
                     py_ref: payDetails.paymentRef,
                 }
 
-                Utils.insertTransactionLog(payDetails, RequestStatus.SUCCESS, response)
+                await Utils.insertTransactionLog(payDetails, response.message, response)
                 return Utils.createResponse(StatusCodes.OK, data)
             } else {
                 /*add the transaction IDs to the response*/
                 response.gateway_ref = payDetails.gatewayRef
                 response.py_ref = payDetails.paymentRef
 
-                Utils.insertTransactionLog(payDetails, RequestStatus.FAILED, response)
+                await Utils.insertTransactionLog(payDetails, response.message, response)
                 return Utils.createResponse(StatusCodes.INTERNAL_SERVER_ERROR, response)
             }
         }
@@ -70,7 +69,7 @@ class PaymentsService {
             }
 
             const response = await flw.Charge.card(payload)
-    
+
             // For PIN transactions
             if (response.meta.authorization.mode === 'pin') {
                 let payload2 = payload
@@ -100,18 +99,16 @@ class PaymentsService {
                     py_ref: payDetails.paymentRef,
                 }
 
-                Utils.insertTransactionLog(payDetails, RequestStatus.SUCCESS, response)
+                await Utils.insertTransactionLog(payDetails, response.message, response)
                 return Utils.createResponse(StatusCodes.OK, data)
             } else {
                 /*add the transaction IDs to the response*/
                 response.gateway_ref = payDetails.gatewayRef
                 response.py_ref = payDetails.paymentRef
 
-                Utils.insertTransactionLog(payDetails, RequestStatus.FAILED, response)
+                await Utils.insertTransactionLog(payDetails, response.message, response)
                 return Utils.createResponse(StatusCodes.INTERNAL_SERVER_ERROR, response)
             }
-    
-    
         } catch (err) {
             return Utils.createResponse(
                 StatusCodes.INTERNAL_SERVER_ERROR,

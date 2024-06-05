@@ -45,9 +45,9 @@ const transactionSchema = new mongoose.Schema({
         required: false,
         default: () => new Date()
     }
-})
+});
 
 // Create the model
-const Transaction = mongoose.model('Transaction', transactionSchema)
+const Transaction = mongoose.model('Transaction', transactionSchema);
 
-module.exports = new Transaction
+module.exports = Transaction;

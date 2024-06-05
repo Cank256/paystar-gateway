@@ -1,5 +1,5 @@
-const { StatusCodes } = require('./constants')
-const { Transaction } = require('../models/transactionsModel');
+const { StatusCodes, RequestStatus } = require('./constants')
+const Transaction = require('../models/transactionsModel');
 
 interface IResponse {
     code: number
@@ -43,19 +43,21 @@ class Utils {
         message?: string,
         response?: IResponse,
     ) {
-
         try {
-
-            return await Transaction.save({
+            const newTransaction = new Transaction({
                 gatewayRef: reqDetails.gatewayRef,
-                paymentRef: reqDetails.body.paymentRef,
-                requestIP: reqDetails.client_ip,
+                paymentRef: reqDetails.paymentRef,
+                requestIP: '127.0.0.1',
                 requestUrl: reqDetails.url,
                 requestBody: reqDetails,
-                message,
-                responseBody: response,
-                createtime: new Date(),
-            })
+                status: reqDetails.status || 'pending',
+                message: message || 'Default message',
+                responseBody: response || {},
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
+    
+            await newTransaction.save();
         } catch (err: any) {
             console.log(err.message)
         }
