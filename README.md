@@ -44,6 +44,29 @@ bun dev
 ## Project Structure
 The project is structured as follows:
 
+.
+├── LICENSE
+├── README.md
+├── code_of_conduct.md
+├── contributing.md
+├── main.ts
+├── package.json
+├── src
+│   ├── controllers
+│   │   └── paymentsController.ts
+│   ├── middleware
+│   │   └── validationMiddleware.ts
+│   ├── models
+│   │   └── transactionsModel.ts
+│   ├── routes
+│   │   ├── index.ts
+│   │   └── paymentRoutes.ts
+│   ├── services
+│   │   └── paymentsService.ts
+│   └── utils
+│       ├── constants.ts
+│       └── utils.ts
+└── tsconfig.json
 
 ## Dependencies
 The application relies on several key dependencies:
