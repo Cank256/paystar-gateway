@@ -6,7 +6,17 @@ const {
 const { phone } = require('phone')
 const Utils = require('../utils/utils')
 
+/**
+ * Validation class provides methods for request validation.
+ */
 class Validation {
+    /**
+     * Validates the request body or parameters against the specified details.
+     * @param req The Express Request object.
+     * @param res The Express Response object.
+     * @param details An array of strings specifying the details to validate.
+     * @param position The position of the details to be validated ('body' or 'params'). Defaults to 'body'.
+     */
     async request(req: Request, res: any, details: string[], position: string = 'body') {
         let errors: string[] = []
         let req_pos = position === 'body' ? req.body : (req as any).params
@@ -43,10 +53,20 @@ class Validation {
         }
     }
 
+    /**
+     * Validates the payment method.
+     * @param method The payment method to validate.
+     * @returns True if the payment method is valid, otherwise false.
+     */
     validatePaymentMethod(method: string): boolean {
         return method === PaymentMethods.CARD || method === PaymentMethods.MOMO
     }
 
+    /**
+     * Validates the phone number.
+     * @param phone_number The phone number to validate.
+     * @returns A promise that resolves to true if the phone number is valid, otherwise false.
+     */
     async validatePhoneNumber(phone_number: string): Promise<boolean> {
         try {
             const formatNumber = this.formatPhoneNumber(phone_number)
@@ -68,6 +88,11 @@ class Validation {
         }
     }
 
+    /**
+     * Formats the phone number to a standard format.
+     * @param phoneNumber The phone number to format.
+     * @returns The formatted phone number or false if the phone number is invalid.
+     */
     formatPhoneNumber(phoneNumber: string): string | false {
         const cleanedNumber = phoneNumber.replace(/\D/g, '')
 
