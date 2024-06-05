@@ -7,7 +7,7 @@ const { phone } = require('phone')
 const Utils = require('../utils/utils')
 
 class Validation {
-    async request(req: Request, res: Response, details: string[], position: string = 'body') {
+    async request(req: Request, res: any, details: string[], position: string = 'body') {
         let errors: string[] = []
         let req_pos = position === 'body' ? req.body : (req as any).params
         let req_var = position === 'body' ? 'field' : 'parameter'
@@ -34,8 +34,13 @@ class Validation {
         }
 
         if (errors.length > 0) {
-            return Utils.createResponse(StatusCodes.BAD_REQUEST, errors)
-        }        
+            const result = await Utils.createResponse(
+                StatusCodes.BAD_REQUEST,
+                errors,
+                `There are missing ${position} fields`
+            )
+            res.status(result.code).json(result);
+        }
     }
 
     validatePaymentMethod(method: string): boolean {
