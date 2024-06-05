@@ -43,7 +43,7 @@ bun dev
 ```
 ## Project Structure
 The project is structured as follows:
-
+```bash
 .
 ├── LICENSE
 ├── README.md
@@ -67,6 +67,7 @@ The project is structured as follows:
 │       ├── constants.ts
 │       └── utils.ts
 └── tsconfig.json
+```
 
 ## Dependencies
 The application relies on several key dependencies:
