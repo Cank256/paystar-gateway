@@ -41,3 +41,38 @@ MONGODB_URI=your_mongodb_connection_uri
 ```bash
 bun dev
 ```
+## Project Structure
+The project is structured as follows:
+
+
+## Dependencies
+The application relies on several key dependencies:
+- body-parse: Middleware for parsing request bodies.
+- cors: Middleware for enabling Cross-Origin Resource Sharing.
+- express: Web framework for building RESTful APIs.
+- flutterwave-node-v3: Node.js SDK for interacting with Flutterwave's API.
+- helmet: Middleware for securing Express apps by setting various HTTP headers.
+- http: Node.js core module for HTTP functionality.
+- mongoose: ODM for MongoDB.
+- phone: Utility for phone number validation and formatting.
+- uniqid: Library for generating unique IDs.
+
+## Contributing
+
+Contributions are always welcome!
+
+See `contributing.md` file in each of the application folders for ways to get started.
+
+Please adhere to this project's `code of conduct`.
+
+
+## Authors
+
+- [Caleb Nkunze](https://www.github.com/Cank256)
+
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+Feel free to explore the codebase, contribute, and make PayStar even better!
