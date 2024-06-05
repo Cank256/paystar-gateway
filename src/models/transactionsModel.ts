@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+const { mongoose, Schema, Document }  = require('mongoose');
 
 /**
  * Interface representing a transaction document.
@@ -17,7 +17,7 @@ interface ITransaction extends Document {
 }
 
 // Define the schema
-const transactionSchema: Schema = new Schema({
+const transactionSchema: typeof Schema = new Schema({
     gatewayRef: {
         type: String,
         required: true
@@ -64,6 +64,6 @@ const transactionSchema: Schema = new Schema({
 });
 
 // Create the model
-const Transaction = mongoose.model<ITransaction>('Transaction', transactionSchema);
+const Transaction = mongoose.model('Transaction', transactionSchema);
 
-export default Transaction;
+module.exports = Transaction;

@@ -1,3 +1,4 @@
+const Transaction = require('../models/transactionsModel');
 const Flutterwave = require('flutterwave-node-v3');
 const flw = new Flutterwave(Bun.env.FLUTTERWAVE_PUBLIC_KEY, Bun.env.FLUTTERWAVE_SECRET_KEY);
 const Utils = require('../utils/utils')
@@ -51,10 +52,10 @@ class PaymentsService {
             return Utils.createResponse(
                 StatusCodes.INTERNAL_SERVER_ERROR,
                 {
+                    error: err,
                     gateway_ref: payDetails.gatewayRef,
                     py_ref: payDetails.paymentRef,
                 },
-                err,
             )
         }
     }
@@ -128,10 +129,38 @@ class PaymentsService {
             return Utils.createResponse(
                 StatusCodes.INTERNAL_SERVER_ERROR,
                 {
+                    error: err,
                     gateway_ref: payDetails.gatewayRef,
                     py_ref: payDetails.paymentRef,
+                }
+            )
+        }
+    }
+
+    async getOneTransaction(details: any) {
+        try {
+            const result = await Transaction.findOne({paymentRef: details.paymentRef})
+
+            if(result){
+                return Utils.createResponse(StatusCodes.OK, result)
+            }
+            else {
+                return Utils.createResponse(
+                    StatusCodes.NOT_FOUND, 
+                    {
+                    message: `No transaction found with paymentRef ${details.paymentRef}`
+                    }
+                )
+            }
+        }
+        catch(err: any){
+            return Utils.createResponse(
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                {
+                    error: err.message,
+                    gateway_ref: details.gatewayRef,
+                    py_ref:details.paymentRef,
                 },
-                err,
             )
         }
     }

@@ -1,4 +1,4 @@
-const { StatusCodes, RequestStatus } = require('./constants')
+const { StatusCodes } = require('./constants')
 const Transaction = require('../models/transactionsModel');
 
 /**
@@ -94,7 +94,14 @@ class Utils {
             // Save the transaction in the database
             await newTransaction.save();
         } catch (err: any) {
-            console.log(err.message)
+            return this.createResponse(
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                {
+                    error: err.message,
+                    gateway_ref: reqDetails.gatewayRef,
+                    py_ref: reqDetails.paymentRef,
+                },
+            )
         }
     }
 }
