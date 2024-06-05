@@ -1,7 +1,23 @@
-const mongoose = require('mongoose');
+import mongoose, { Schema, Document } from 'mongoose';
+
+/**
+ * Interface representing a transaction document.
+ */
+interface ITransaction extends Document {
+    gatewayRef: string;
+    paymentRef: string;
+    status: string;
+    message: string;
+    requestUrl: string;
+    requestIP: string;
+    requestBody: any;
+    responseBody?: any;
+    createdAt: Date;
+    updatedAt: Date;
+}
 
 // Define the schema
-const transactionSchema = new mongoose.Schema({
+const transactionSchema: Schema = new Schema({
     gatewayRef: {
         type: String,
         required: true
@@ -48,6 +64,6 @@ const transactionSchema = new mongoose.Schema({
 });
 
 // Create the model
-const Transaction = mongoose.model('Transaction', transactionSchema);
+const Transaction = mongoose.model<ITransaction>('Transaction', transactionSchema);
 
-module.exports = Transaction;
+export default Transaction;
