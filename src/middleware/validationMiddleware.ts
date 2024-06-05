@@ -1,8 +1,10 @@
 const {
     ErrorMessages,
     PaymentMethods,
+    StatusCodes
 } = require('../utils/constants')
 const { phone } = require('phone')
+const Utils = require('../utils/utils')
 
 class Validation {
     async request(req: Request, res: Response, details: string[], position: string = 'body') {
@@ -32,11 +34,7 @@ class Validation {
         }
 
         if (errors.length > 0) {
-            return (res as any).status(400).json({
-                success: false,
-                message: 'Validation Error',
-                errors: errors,
-            })
+            return Utils.createResponse(StatusCodes.BAD_REQUEST, errors)
         }        
     }
 
