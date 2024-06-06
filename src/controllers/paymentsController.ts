@@ -12,9 +12,9 @@ class PaymentsController {
      * @handler PaymentsController.getAll
      */
     async getAll(req: any, res: any) {
-        res.status(200).json({
-            'message': 'View all payments'
-        })
+        const result = await payments.getAllTransactions(req.gatewayRef)
+
+        res.status(result.code).json(result)
     }
 
     /**

@@ -164,6 +164,33 @@ class PaymentsService {
             )
         }
     }
+
+    async getAllTransactions(gateway_ref: string) {
+        try {
+            const result = await Transaction.find()
+
+            if(result){
+                return Utils.createResponse(StatusCodes.OK, result)
+            }
+            else {
+                return Utils.createResponse(
+                    StatusCodes.NOT_FOUND, 
+                    {
+                    message: `No transactions found.`
+                    }
+                )
+            }
+        }
+        catch(err: any){
+            return Utils.createResponse(
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                {
+                    error: err.message,
+                    gateway_ref: gateway_ref
+                },
+            )
+        }
+    }
 }
 
 module.exports = new PaymentsService;
