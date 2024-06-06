@@ -5,19 +5,19 @@ const Utils = require('../utils/utils')
 const { StatusCodes, RequestStatus } = require('../utils/constants')
 
 /**
- * PaymentsService handles payment-related operations.
+ * TransactionsService handles transaction-related operations.
  */
 class TransactionsService {
     /**
-     * Retrieves a single transaction by paymentRef.
+     * Retrieves a single transaction by txRef.
      * 
      * @param {Object} details - An object containing the details needed to find the transaction.
-     * @param {string} details.paymentRef - The payment reference to search for.
+     * @param {string} details.txRef - The transaction reference to search for.
      * @returns {Promise<Object>} - A promise that resolves to a response object containing the transaction or an error message.
      */
     async getOneTransaction(details: any) {
         try {
-            const result = await Transaction.findOne({ paymentRef: details.paymentRef });
+            const result = await Transaction.findOne({ txRef: details.txRef });
 
             if (result) {
                 return Utils.createResponse(StatusCodes.OK, result);
@@ -25,7 +25,7 @@ class TransactionsService {
                 return Utils.createResponse(
                     StatusCodes.NOT_FOUND,
                     {
-                        message: `No transaction found with paymentRef ${details.paymentRef}`
+                        message: `No transaction found with txRef ${details.txRef}`
                     }
                 );
             }
@@ -35,7 +35,7 @@ class TransactionsService {
                 {
                     error: err.message,
                     gateway_ref: details.gatewayRef,
-                    py_ref: details.paymentRef,
+                    py_ref: details.txRef,
                 }
             );
         }
@@ -74,16 +74,16 @@ class TransactionsService {
 
     async refundTransaction(details: any){
         try {
-            // Assuming paymentRef is the unique transaction reference used with Flutterwave
-            const paymentRef = details.paymentRef;
+            // Assuming txRef is the unique transaction reference used with Flutterwave
+            const txRef = details.txRef;
 
             // Fetch the transaction from your database (optional)
-            const transaction = await this.getOneTransaction({ paymentRef });
+            const transaction = await this.getOneTransaction({ txRef });
             if (transaction.code !== StatusCodes.OK) {
                 return Utils.createResponse(
                     StatusCodes.BAD_REQUEST,
                     {
-                        error: `Error occured while retriving transaction with paymentRef: ${paymentRef}`,
+                        error: `Error occured while retriving transaction with txRef: ${txRef}`,
                         gateway_ref: details.gatewayRef
                     }
                 );
@@ -110,9 +110,9 @@ class TransactionsService {
                     {
                         error: response.message,
                         gateway_ref: details.gatewayRef,
-                        payment_ref: details.paymentRef
+                        transaction_ref: details.txRef
                     },
-                    `Refund failed for paymentRef ${paymentRef}`
+                    `Refund failed for txRef ${txRef}`
                 );
             }
         } catch (err: any) {
@@ -121,7 +121,7 @@ class TransactionsService {
                 {
                     error: err.message,
                     gateway_ref: details.gatewayRef,
-                    payment_ref: details.paymentRef
+                    transaction_ref: details.txRef
                 },
                 'Refund encountered an error'
             );
@@ -130,16 +130,16 @@ class TransactionsService {
 
     async initiateRefund(details: any){
         try {
-            // Assuming paymentRef is the unique transaction reference used with Flutterwave
-            const paymentRef = details.paymentRef;
+            // Assuming txRef is the unique transaction reference used with Flutterwave
+            const txRef = details.txRef;
 
             // Fetch the transaction from your database (optional)
-            const transaction = await this.getOneTransaction({ paymentRef });
+            const transaction = await this.getOneTransaction({ txRef });
             if (transaction.code !== StatusCodes.OK) {
                 return Utils.createResponse(
                     StatusCodes.BAD_REQUEST,
                     {
-                        error: `Error occured while retriving transaction with paymentRef: ${paymentRef}`,
+                        error: `Error occured while retriving transaction with txRef: ${txRef}`,
                         gateway_ref: details.gatewayRef
                     }
                 );
@@ -166,9 +166,9 @@ class TransactionsService {
                     {
                         error: response.message,
                         gateway_ref: details.gatewayRef,
-                        payment_ref: details.paymentRef
+                        transaction_ref: details.txRef
                     },
-                    `Refund failed for paymentRef ${paymentRef}`
+                    `Refund failed for txRef ${txRef}`
                 );
             }
         } catch (err: any) {
@@ -177,7 +177,7 @@ class TransactionsService {
                 {
                     error: err.message,
                     gateway_ref: details.gatewayRef,
-                    payment_ref: details.paymentRef
+                    transaction_ref: details.txRef
                 },
                 'Refund encountered an error'
             );

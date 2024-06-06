@@ -21,14 +21,14 @@ transactionRoutes.get('/', transactionsController.getAll);
 transactionRoutes.get('/:transactionRef', transactionsController.getOne);
 
 /**
- * POST /transactions/:paymentRef/refund
+ * POST /transactions/:txRef/refund
  * Refund a payment.
  * @name Refund Transaction
- * @route {POST} /transactions/:paymentRef/refund
- * @param {string} paymentRef The reference ID of the payment to be refunded.
+ * @route {POST} /transactions/:txRef/refund
+ * @param {string} txRef The reference ID of the payment to be refunded.
  * @handler transactionsController.refund
  */
-transactionRoutes.post('/:paymentRef/refund', transactionsController.refund);
+transactionRoutes.post('/:txRef/refund', transactionsController.refund);
 
 // Export the router instance
 module.exports = transactionRoutes;

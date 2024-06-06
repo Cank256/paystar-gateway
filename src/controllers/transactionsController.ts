@@ -2,14 +2,14 @@ const validate = require('./../middleware/validationMiddleware')
 const transactions = require('./../services/transactionsService')
 
 /**
- * PaymentsController handles HTTP requests related to payments.
+ * TransactionsController handles HTTP requests related to transactions.
  */
-class PaymentsController {
+class TransactionsController {
     /**
-     * Get all payments.
-     * @name Get All Payments
-     * @route {GET} /payments
-     * @handler PaymentsController.getAll
+     * Get all transactions.
+     * @name Get All Transactions
+     * @route {GET} /transactions
+     * @handler TransactionsController.getAll
      */
     async getAll(req: any, res: any) {
         const result = await transactions.getAllTransactions(req.gatewayRef)
@@ -18,14 +18,14 @@ class PaymentsController {
     }
 
     /**
-     * Get a specific payment by its reference.
-     * @name Get Payment by Reference
-     * @route {GET} /payments/:paymentRef
-     * @param {string} paymentRef The reference ID of the payment.
-     * @handler PaymentsController.getOne
+     * Get a specific transaction by its reference.
+     * @name Get Transaction by Reference
+     * @route {GET} /transactions/:txRef
+     * @param {string} txRef The reference ID of the transaction.
+     * @handler TransactionsController.getOne
      */
     async getOne(req: any, res: any) {
-        const details = ['paymentRef']
+        const details = ['txRef']
 
         // Validate request
         await validate.request(req, res, details, 'params')
@@ -39,14 +39,14 @@ class PaymentsController {
     }
 
     /**
-     * Refund a payment.
-     * @name Refund Payment
-     * @route {POST} /payments/:paymentRef/refund
-     * @param {string} paymentRef The reference ID of the payment to be refunded.
-     * @handler PaymentsController.refund
+     * Refund a transaction.
+     * @name Refund Transaction
+     * @route {POST} /transactions/:txRef/refund
+     * @param {string} txRef The reference ID of the transaction to be refunded.
+     * @handler TransactionsController.refund
      */
     async refund(req: any, res: any) {
-        const details = ['paymentRef']
+        const details = ['txRef']
 
         // Validate request
         await validate.request(req, res, details, 'params')
@@ -60,4 +60,4 @@ class PaymentsController {
     }
 }
 
-module.exports = new PaymentsController;
+module.exports = new TransactionsController;

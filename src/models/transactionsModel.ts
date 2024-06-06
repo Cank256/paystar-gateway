@@ -5,7 +5,7 @@ const { mongoose, Schema, Document }  = require('mongoose');
  */
 interface ITransaction extends Document {
     gatewayRef: string;
-    paymentRef: string;
+    txRef: string;
     status: string;
     message: string;
     requestUrl: string;
@@ -22,7 +22,7 @@ const transactionSchema: typeof Schema = new Schema({
         type: String,
         required: true
     },
-    paymentRef: {
+    txRef: {
         type: String,
         required: true
     },

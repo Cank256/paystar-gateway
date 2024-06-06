@@ -35,7 +35,7 @@ class PaymentsService {
                     status: RequestStatus.PENDING,
                     url: response.meta.authorization.redirect,
                     gateway_ref: payDetails.gatewayRef,
-                    py_ref: payDetails.paymentRef,
+                    py_ref: payDetails.txRef,
                 }
 
                 await Utils.insertTransactionLog(payDetails, response.message, response)
@@ -43,7 +43,7 @@ class PaymentsService {
             } else {
                 /*add the transaction IDs to the response*/
                 response.gateway_ref = payDetails.gatewayRef
-                response.py_ref = payDetails.paymentRef
+                response.py_ref = payDetails.txRef
 
                 await Utils.insertTransactionLog(payDetails, response.message, response)
                 return Utils.createResponse(StatusCodes.INTERNAL_SERVER_ERROR, response)
@@ -55,7 +55,7 @@ class PaymentsService {
                 {
                     error: err,
                     gateway_ref: payDetails.gatewayRef,
-                    py_ref: payDetails.paymentRef,
+                    py_ref: payDetails.txRef,
                 },
             )
         }
@@ -113,7 +113,7 @@ class PaymentsService {
                     status: RequestStatus.PENDING,
                     url: response.meta.authorization.redirect,
                     gateway_ref: payDetails.gatewayRef,
-                    py_ref: payDetails.paymentRef,
+                    py_ref: payDetails.txRef,
                 }
 
                 await Utils.insertTransactionLog(payDetails, response.message, response)
@@ -121,7 +121,7 @@ class PaymentsService {
             } else {
                 /*add the transaction IDs to the response*/
                 response.gateway_ref = payDetails.gatewayRef
-                response.py_ref = payDetails.paymentRef
+                response.py_ref = payDetails.txRef
 
                 await Utils.insertTransactionLog(payDetails, response.message, response)
                 return Utils.createResponse(StatusCodes.INTERNAL_SERVER_ERROR, response)
@@ -132,7 +132,7 @@ class PaymentsService {
                 {
                     error: err,
                     gateway_ref: payDetails.gatewayRef,
-                    py_ref: payDetails.paymentRef,
+                    py_ref: payDetails.txRef,
                 }
             )
         }
