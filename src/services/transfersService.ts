@@ -6,7 +6,7 @@ const { StatusCodes, RequestStatus } = require('../utils/constants')
 /**
  * PaymentsService handles payment-related operations.
  */
-class PaymentsService {
+class TransfersService {
 
     /**
      * Initiates a mobile money transfer using the Flutterwave API.
@@ -64,4 +64,4 @@ class PaymentsService {
     }
 }
 
-module.exports = new PaymentsService;
+module.exports = new TransfersService;

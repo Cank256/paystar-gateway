@@ -13,7 +13,7 @@ class PaymentsController {
      * @handler PaymentsController.initiate
      */
     async initiate(req: any, res: any) {
-        const details = ['txRef', 'method', 'amount', 'currency', 'email', 'phone_number', 'description']
+        const details = ['txRef', 'method', 'amount', 'currency', 'email', 'phone_number', 'description', 'meta']
 
         // Validate request
         await validate.request(req, res, details, 'body')

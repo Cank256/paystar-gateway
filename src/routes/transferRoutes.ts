@@ -8,7 +8,7 @@ const transfersController = require('../controllers/transfersController')
  * @route {POST} /transfers
  * @handler transfersController.initiate
  */
-transferRoutes.post('/transfer', transfersController.initiateTransfer);
+transferRoutes.post('/', transfersController.initiateTransfer);
 
 // Export the router instance
 module.exports = transferRoutes;

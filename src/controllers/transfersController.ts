@@ -1,10 +1,10 @@
 const validate = require('./../middleware/validationMiddleware')
-const transfers= require('./../services/transfersService')
+const transfers = require('./../services/transfersService')
 
 /**
  * PaymentsController handles HTTP requests related to payments.
  */
-class PaymentsController {
+class TransfersController {
 
     /**
      * Initiate a new payment.
@@ -13,7 +13,7 @@ class PaymentsController {
      * @handler PaymentsController.initiate
      */
     async initiateTransfer(req: any, res: any) {
-        const details = ['txRef', 'method', 'amount', 'currency', 'email', 'phone_number', 'description']
+        const details = ['txRef', 'amount', 'currency', 'email', 'phone_number', 'description', 'meta']
 
         // Validate request
         await validate.request(req, res, details, 'body')
@@ -23,10 +23,10 @@ class PaymentsController {
         transferDetails.client_ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
         transferDetails.url = req.originalUrl
 
-        const result = await transfers.initiateTransfer(transferDetails)
+        const result = await transfers.initiate(transferDetails)
 
         res.status(result.code).json(result)
     }
 }
 
-module.exports = new PaymentsController;
+module.exports = new TransfersController;
