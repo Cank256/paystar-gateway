@@ -80,7 +80,7 @@ class Utils {
         try {
             const newTransaction = new Transaction({
                 gatewayRef: reqDetails.gatewayRef,
-                paymentRef: reqDetails.paymentRef,
+                txRef: reqDetails.txRef,
                 requestIP: '127.0.0.1',
                 requestUrl: reqDetails.url,
                 requestBody: reqDetails,
@@ -99,7 +99,7 @@ class Utils {
                 {
                     error: err.message,
                     gateway_ref: reqDetails.gatewayRef,
-                    py_ref: reqDetails.paymentRef,
+                    transaction_ref: reqDetails.txRef,
                 },
             )
         }

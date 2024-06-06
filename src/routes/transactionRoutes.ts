@@ -18,7 +18,7 @@ transactionRoutes.get('/', transactionsController.getAll);
  * @param {string} transactionRef The reference ID of the transaction.
  * @handler transactionsController.getOne
  */
-transactionRoutes.get('/:transactionRef', transactionsController.getOne);
+transactionRoutes.get('/:txRef', transactionsController.getOne);
 
 /**
  * POST /transactions/:txRef/refund

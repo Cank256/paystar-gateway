@@ -38,11 +38,11 @@ const handleChargeCompleted = async (event: any) => {
     };
 
     // Find the transaction by payment reference and update it
-    await Transaction.findOneAndUpdate({ paymentRef: data.tx_ref }, update);
+    await Transaction.findOneAndUpdate({ gatewayRef: data.tx_ref }, update);
 
     // Log the transaction
     await Utils.insertTransactionLog(
-        { gatewayRef: data.tx_ref, paymentRef: data.tx_ref },
+        { gatewayRef: data.tx_ref },
         'Charge completed',
         data
     );
@@ -64,11 +64,11 @@ const handleRefundCompleted = async (event: any) => {
     };
 
     // Find the transaction by payment reference and update it
-    await Transaction.findOneAndUpdate({ paymentRef: data.tx_ref }, update);
+    await Transaction.findOneAndUpdate({ gatewayRef: data.tx_ref}, update);
 
     // Log the transaction
     await Utils.insertTransactionLog(
-        { gatewayRef: data.tx_ref, paymentRef: data.tx_ref },
+        { gatewayRef: data.tx_ref },
         'Refund completed',
         data
     );
@@ -90,11 +90,11 @@ const handleTransferCompleted = async (event: any) => {
     };
 
     // Find the transaction by payment reference and update it
-    await Transaction.findOneAndUpdate({ paymentRef: data.reference }, update);
+    await Transaction.findOneAndUpdate({ gatewayRef: data.reference }, update);
 
     // Log the transaction
     await Utils.insertTransactionLog(
-        { gatewayRef: data.reference, paymentRef: data.reference },
+        { gatewayRef: data.reference},
         'Transfer completed',
         data
     );
