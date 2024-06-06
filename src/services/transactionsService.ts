@@ -127,6 +127,62 @@ class TransactionsService {
             );
         }
     }
+
+    async initiateRefund(details: any){
+        try {
+            // Assuming paymentRef is the unique transaction reference used with Flutterwave
+            const paymentRef = details.paymentRef;
+
+            // Fetch the transaction from your database (optional)
+            const transaction = await this.getOneTransaction({ paymentRef });
+            if (transaction.code !== StatusCodes.OK) {
+                return Utils.createResponse(
+                    StatusCodes.BAD_REQUEST,
+                    {
+                        error: `Error occured while retriving transaction with paymentRef: ${paymentRef}`,
+                        gateway_ref: details.gatewayRef
+                    }
+                );
+            }
+            
+            // Prepare the payload for the refund request
+            const payload = {
+                id: transaction.data.responseBody.data.flw_ref, // Flutterwave transaction ID
+                amount: transaction.data.requestBody.amount
+            };
+
+            // Initiate the refund
+            const response = await flw.Transaction.refund(payload);
+            console.log(response)
+
+            // Check the response from Flutterwave
+            if (response.status.toUpperCase() == RequestStatus.SUCCESSFUL) {
+
+                return Utils.createResponse(StatusCodes.OK, response);
+
+            } else {
+                return Utils.createResponse(
+                    StatusCodes.INTERNAL_SERVER_ERROR,
+                    {
+                        error: response.message,
+                        gateway_ref: details.gatewayRef,
+                        payment_ref: details.paymentRef
+                    },
+                    `Refund failed for paymentRef ${paymentRef}`
+                );
+            }
+        } catch (err: any) {
+            return Utils.createResponse(
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                {
+                    error: err.message,
+                    gateway_ref: details.gatewayRef,
+                    payment_ref: details.paymentRef
+                },
+                'Refund encountered an error'
+            );
+        }
+    }
 }
 
 module.exports = new TransactionsService;

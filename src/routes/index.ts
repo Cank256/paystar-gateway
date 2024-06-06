@@ -21,9 +21,12 @@ routes.get('/', (req: any, res: any) => {
 })
 
 // Mount paymentRoutes under /payments path
-routes.use('/payments', require('./paymentRoutes'))
+routes.use('/collect', require('./paymentRoutes'))
 
 // Mount transferRoutes under /transfer path
 routes.use('/transfer', require('./transferRoutes'))
+
+// Mount transferRoutes under /transfer path
+routes.use('/transactions', require('./transactionRoutes'))
 
 module.exports = routes

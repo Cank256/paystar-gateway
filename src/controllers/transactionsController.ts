@@ -37,6 +37,27 @@ class PaymentsController {
 
         res.status(result.code).json(result)
     }
+
+    /**
+     * Refund a payment.
+     * @name Refund Payment
+     * @route {POST} /payments/:paymentRef/refund
+     * @param {string} paymentRef The reference ID of the payment to be refunded.
+     * @handler PaymentsController.refund
+     */
+    async refund(req: any, res: any) {
+        const details = ['paymentRef']
+
+        // Validate request
+        await validate.request(req, res, details, 'params')
+
+        const transDetails = req.params
+        transDetails.gatewayRef = req.gatewayRef
+
+        const result = await transactions.initiateRefund(transDetails)
+
+        res.status(result.code).json(result)
+    }
 }
 
 module.exports = new PaymentsController;
