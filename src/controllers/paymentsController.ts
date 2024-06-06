@@ -75,9 +75,12 @@ class PaymentsController {
         // Validate request
         await validate.request(req, res, details, 'params')
 
-        res.status(200).json({
-            'message': `Refund payment with id ${req.params.paymentRef}`
-        })
+        const transDetails = req.params
+        transDetails.gatewayRef = req.gatewayRef
+
+        const result = await payments.refundTransaction(transDetails)
+
+        res.status(result.code).json(result)
     }
 }
 
