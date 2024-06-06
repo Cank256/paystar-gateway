@@ -36,6 +36,8 @@ class TransfersService {
                     status: RequestStatus.PENDING,
                     transfer_id: response.data.id,
                     reference: transferDetails.reference,
+                    gateway_ref: transferDetails.gatewayRef,
+                    transaction_ref: transferDetails.txRef
                 };
 
                 // Log the transfer transaction
@@ -45,6 +47,8 @@ class TransfersService {
             } else {
                 // Handle the case where the transfer was not successful
                 response.reference = transferDetails.reference;
+                response.gateway_ref = transferDetails.gatewayRef
+                response.transaction_ref = transferDetails.txRef
 
                 // Log the failed transaction
                 await Utils.insertTransactionLog(transferDetails, response.message, response.data);
@@ -56,7 +60,8 @@ class TransfersService {
             return Utils.createResponse(
                 StatusCodes.INTERNAL_SERVER_ERROR,
                 {
-                    reference: transferDetails.reference,
+                    gateway_ref: transferDetails.gatewayRef,
+                    transaction_ref: transferDetails.reference,
                 },
                 err.message
             );
