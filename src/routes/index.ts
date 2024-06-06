@@ -29,4 +29,7 @@ routes.use('/transfer', require('./transferRoutes'))
 // Mount transferRoutes under /transfer path
 routes.use('/transactions', require('./transactionRoutes'))
 
+// Mount transferRoutes under /transfer path
+routes.use('/webhook', require('./webhookRoutes'))
+
 module.exports = routes
