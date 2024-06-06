@@ -137,58 +137,67 @@ class PaymentsService {
         }
     }
 
+    /**
+     * Retrieves a single transaction by paymentRef.
+     * 
+     * @param {Object} details - An object containing the details needed to find the transaction.
+     * @param {string} details.paymentRef - The payment reference to search for.
+     * @returns {Promise<Object>} - A promise that resolves to a response object containing the transaction or an error message.
+     */
     async getOneTransaction(details: any) {
         try {
-            const result = await Transaction.findOne({paymentRef: details.paymentRef})
+            const result = await Transaction.findOne({ paymentRef: details.paymentRef });
 
-            if(result){
-                return Utils.createResponse(StatusCodes.OK, result)
-            }
-            else {
+            if (result) {
+                return Utils.createResponse(StatusCodes.OK, result);
+            } else {
                 return Utils.createResponse(
-                    StatusCodes.NOT_FOUND, 
+                    StatusCodes.NOT_FOUND,
                     {
-                    message: `No transaction found with paymentRef ${details.paymentRef}`
+                        message: `No transaction found with paymentRef ${details.paymentRef}`
                     }
-                )
+                );
             }
-        }
-        catch(err: any){
+        } catch (err: any) {
             return Utils.createResponse(
                 StatusCodes.INTERNAL_SERVER_ERROR,
                 {
                     error: err.message,
                     gateway_ref: details.gatewayRef,
-                    py_ref:details.paymentRef,
-                },
-            )
+                    py_ref: details.paymentRef,
+                }
+            );
         }
     }
 
-    async getAllTransactions(gateway_ref: string) {
+    /**
+     * Retrieves all transactions.
+     * 
+     * @param {string} gateway_ref - The gateway reference to include in the error response if necessary.
+     * @returns {Promise<Object>} - A promise that resolves to a response object containing all transactions or an error message.
+     */
+    async getAllTransactions(gateway_ref: any) {
         try {
-            const result = await Transaction.find()
+            const result = await Transaction.find();
 
-            if(result){
-                return Utils.createResponse(StatusCodes.OK, result)
-            }
-            else {
+            if (result) {
+                return Utils.createResponse(StatusCodes.OK, result);
+            } else {
                 return Utils.createResponse(
-                    StatusCodes.NOT_FOUND, 
+                    StatusCodes.NOT_FOUND,
                     {
-                    message: `No transactions found.`
+                        message: 'No transactions found.'
                     }
-                )
+                );
             }
-        }
-        catch(err: any){
+        } catch (err: any) {
             return Utils.createResponse(
                 StatusCodes.INTERNAL_SERVER_ERROR,
                 {
                     error: err.message,
                     gateway_ref: gateway_ref
-                },
-            )
+                }
+            );
         }
     }
 }
