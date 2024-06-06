@@ -39,5 +39,14 @@ paymentRoutes.get('/:paymentRef', paymentsController.getOne);
  */
 paymentRoutes.post('/:paymentRef/refund', paymentsController.refund);
 
+/**
+ * POST /payments/transfer
+ * Initiate a new transfer.
+ * @name Initiate Transfer
+ * @route {POST} /payments
+ * @handler paymentsController.initiateTransfer
+ */
+paymentRoutes.post('/transfer', paymentsController.initiateTransfer);
+
 // Export the router instance
 module.exports = paymentRoutes;
