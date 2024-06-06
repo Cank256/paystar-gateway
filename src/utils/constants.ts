@@ -22,6 +22,7 @@ export const ErrorMessages = {
     UNPROCESSABLE_ENTITY: 'Unprocessable entity',                         // Error message for unprocessable entity
     WRONG_PAYMENT_METHOD: 'Wrong payment method. Use card or momo',       // Error message for wrong payment method
     INVALID_PHONE_NUMBER: 'Invalid phone number or unsupported phone network',  // Error message for invalid phone number
+    DUPLICATE_TX_REF: 'Duplicate Transaction Reference (txRef)',  // Error message for duplicate transaction reference
 };
 
 // PaymentMethods: Supported payment methods in the application

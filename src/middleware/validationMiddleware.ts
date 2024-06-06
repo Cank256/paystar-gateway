@@ -5,6 +5,7 @@ const {
 } = require('../utils/constants')
 const { phone } = require('phone')
 const Utils = require('../utils/utils')
+const Transaction = require('../models/transactionsModel')
 
 /**
  * Validation class provides methods for request validation.
@@ -50,6 +51,19 @@ class Validation {
                 `There are missing ${position} fields`
             )
             res.status(result.code).json(result);
+        }
+
+        if (position === 'body') {
+            const checkDuplicate = await this.checkDuplicateTransaction(req_pos.txRef)
+            if(!checkDuplicate){
+                const result = await Utils.createResponse(
+                    StatusCodes.BAD_REQUEST,
+                    {
+                        error: ErrorMessages.DUPLICATE_TX_REF
+                    }
+                )
+                res.status(result.code).json(result);
+            }
         }
     }
 
@@ -105,6 +119,17 @@ class Validation {
         } else {
             return false
         }
+    }
+
+    /**
+     * Checks if the transaction already exists.
+     * @param txRef The transaction reference to check.
+     * @returns True if the transaction exists, otherwise false.
+     */
+    async checkDuplicateTransaction(txRef: string): Promise<boolean> {
+        const result = await Transaction.findOne({ txRef: txRef })
+
+        return result !== null ? false : true
     }
 }
 
