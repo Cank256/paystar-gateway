@@ -5,17 +5,6 @@ const payments = require('./../services/paymentsService')
  * PaymentsController handles HTTP requests related to payments.
  */
 class PaymentsController {
-    /**
-     * Get all payments.
-     * @name Get All Payments
-     * @route {GET} /payments
-     * @handler PaymentsController.getAll
-     */
-    async getAll(req: any, res: any) {
-        const result = await payments.getAllTransactions(req.gatewayRef)
-
-        res.status(result.code).json(result)
-    }
 
     /**
      * Initiate a new payment.
@@ -42,27 +31,6 @@ class PaymentsController {
     }
 
     /**
-     * Get a specific payment by its reference.
-     * @name Get Payment by Reference
-     * @route {GET} /payments/:paymentRef
-     * @param {string} paymentRef The reference ID of the payment.
-     * @handler PaymentsController.getOne
-     */
-    async getOne(req: any, res: any) {
-        const details = ['paymentRef']
-
-        // Validate request
-        await validate.request(req, res, details, 'params')
-
-        const transDetails = req.params
-        transDetails.gatewayRef = req.gatewayRef
-
-        const result = await payments.getOneTransaction(transDetails)
-
-        res.status(result.code).json(result)
-    }
-
-    /**
      * Refund a payment.
      * @name Refund Payment
      * @route {POST} /payments/:paymentRef/refund
@@ -78,29 +46,7 @@ class PaymentsController {
         const transDetails = req.params
         transDetails.gatewayRef = req.gatewayRef
 
-        const result = await payments.refundTransaction(transDetails)
-
-        res.status(result.code).json(result)
-    }
-
-    /**
-     * Initiate a new payment.
-     * @name Initiate Payment
-     * @route {POST} /payments
-     * @handler PaymentsController.initiate
-     */
-    async initiateTransfer(req: any, res: any) {
-        const details = ['paymentRef', 'method', 'amount', 'currency', 'email', 'phone_number', 'description']
-
-        // Validate request
-        await validate.request(req, res, details, 'body')
-
-        const transferDetails = req.body
-        transferDetails.gatewayRef = req.gatewayRef
-        transferDetails.client_ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
-        transferDetails.url = req.originalUrl
-
-        const result = await payments.initiateTransfer(transferDetails)
+        const result = await payments.initiateRefund(transDetails)
 
         res.status(result.code).json(result)
     }

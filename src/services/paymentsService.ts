@@ -1,8 +1,8 @@
-const Transaction = require('../models/transactionsModel');
 const Flutterwave = require('flutterwave-node-v3');
 const flw = new Flutterwave(Bun.env.FLUTTERWAVE_PUBLIC_KEY, Bun.env.FLUTTERWAVE_SECRET_KEY);
 const Utils = require('../utils/utils')
 const { StatusCodes, RequestStatus } = require('../utils/constants')
+const TransactionsService = require('./transactionsService')
 
 /**
  * PaymentsService handles payment-related operations.
@@ -138,77 +138,13 @@ class PaymentsService {
         }
     }
 
-    /**
-     * Retrieves a single transaction by paymentRef.
-     * 
-     * @param {Object} details - An object containing the details needed to find the transaction.
-     * @param {string} details.paymentRef - The payment reference to search for.
-     * @returns {Promise<Object>} - A promise that resolves to a response object containing the transaction or an error message.
-     */
-    async getOneTransaction(details: any) {
-        try {
-            const result = await Transaction.findOne({ paymentRef: details.paymentRef });
-
-            if (result) {
-                return Utils.createResponse(StatusCodes.OK, result);
-            } else {
-                return Utils.createResponse(
-                    StatusCodes.NOT_FOUND,
-                    {
-                        message: `No transaction found with paymentRef ${details.paymentRef}`
-                    }
-                );
-            }
-        } catch (err: any) {
-            return Utils.createResponse(
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                {
-                    error: err.message,
-                    gateway_ref: details.gatewayRef,
-                    py_ref: details.paymentRef,
-                }
-            );
-        }
-    }
-
-    /**
-     * Retrieves all transactions.
-     * 
-     * @param {string} gateway_ref - The gateway reference to include in the error response if necessary.
-     * @returns {Promise<Object>} - A promise that resolves to a response object containing all transactions or an error message.
-     */
-    async getAllTransactions(gateway_ref: any) {
-        try {
-            const result = await Transaction.find();
-
-            if (result) {
-                return Utils.createResponse(StatusCodes.OK, result);
-            } else {
-                return Utils.createResponse(
-                    StatusCodes.NOT_FOUND,
-                    {
-                        message: 'No transactions found.'
-                    }
-                );
-            }
-        } catch (err: any) {
-            return Utils.createResponse(
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                {
-                    error: err.message,
-                    gateway_ref: gateway_ref
-                }
-            );
-        }
-    }
-
-    async refundTransaction(details: any){
+    async initiateRefund(details: any){
         try {
             // Assuming paymentRef is the unique transaction reference used with Flutterwave
             const paymentRef = details.paymentRef;
 
             // Fetch the transaction from your database (optional)
-            const transaction = await this.getOneTransaction({ paymentRef });
+            const transaction = await TransactionsService.getOneTransaction({ paymentRef });
             if (transaction.code !== StatusCodes.OK) {
                 return Utils.createResponse(
                     StatusCodes.BAD_REQUEST,
@@ -254,61 +190,6 @@ class PaymentsService {
                     payment_ref: details.paymentRef
                 },
                 'Refund encountered an error'
-            );
-        }
-    }
-
-    /**
-     * Initiates a transfer using the Flutterwave API.
-     *
-     * @param {Object} transferDetails - The details of the transfer.
-     * @returns {Promise<Object>} - The response object containing the transfer result.
-     */
-    async initiateTransfer(transferDetails: any) {
-        try {
-            const payload = {
-                account_bank: 'MPS', // Bank code for Mobile Money
-                account_number: transferDetails.phone_number,
-                amount: transferDetails.amount,
-                narration: transferDetails.description,
-                currency: transferDetails.currency,
-                beneficiary_name: transferDetails.meta.client_name,
-                reference: transferDetails.gatewayRef, // Unique reference for this transfer
-                callback_url: transferDetails.callback_url // URL to be called after transfer
-            };
-
-            // Initiate the transfer
-            const response = await flw.Transfer.initiate(payload);
-
-            // Check the response from Flutterwave
-            if (response.status === 'success') {
-                let data = {
-                    status: RequestStatus.PENDING,
-                    transfer_id: response.data.id,
-                    reference: transferDetails.reference,
-                };
-
-                // Log the transfer transaction
-                await Utils.insertTransactionLog(transferDetails, response.message, response.data);
-
-                return Utils.createResponse(StatusCodes.OK, data);
-            } else {
-                // Handle the case where the transfer was not successful
-                response.reference = transferDetails.reference;
-
-                // Log the failed transaction
-                await Utils.insertTransactionLog(transferDetails, response.message, response.data);
-
-                return Utils.createResponse(StatusCodes.INTERNAL_SERVER_ERROR, response);
-            }
-        } catch (err: any) {
-
-            return Utils.createResponse(
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                {
-                    reference: transferDetails.reference,
-                },
-                err.message
             );
         }
     }
