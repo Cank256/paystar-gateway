@@ -9,8 +9,8 @@ const uniqid = require('uniqid');
 const { ErrorMessages } = require('./src/utils/constants');
 
 const app = express();
-const port = Bun.env.APP_PORT || 8030;
-const dbUri = Bun.env.MONGODB_URI || 'mongodb://localhost:27017/paystar-gateway';
+const port = process.env.APP_PORT || 8030;
+const dbUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/paystar-gateway';
 
 // Middleware
 

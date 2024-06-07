@@ -1,5 +1,5 @@
 const Flutterwave = require('flutterwave-node-v3');
-const flw = new Flutterwave(Bun.env.FLUTTERWAVE_PUBLIC_KEY, Bun.env.FLUTTERWAVE_SECRET_KEY);
+const flw = new Flutterwave(process.env.FLUTTERWAVE_PUBLIC_KEY, process.env.FLUTTERWAVE_SECRET_KEY);
 const Utils = require('../utils/utils')
 const { StatusCodes, RequestStatus } = require('../utils/constants')
 
